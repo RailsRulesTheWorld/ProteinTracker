@@ -1,14 +1,14 @@
-Users = new Meteor.Collection('protein_data');
+ProteinData = new Meteor.Collection('protein_data');
 History = new Meteor.Collection('history');
 
 if (Meteor.isClient) {
     // 手动进行发布和订阅的必要性是客户关心他们想要的，而不是把所有数据都发送过去
-    Meteor.subscribe('allUsers');
+    Meteor.subscribe('allProteinData');
     Meteor.subscribe('allHistory');
 
     Template.userDetails.helpers({
         user: function() {
-            return Users.findOne();
+            return ProteinData.findOne();
         }
     });
 
@@ -27,7 +27,7 @@ if (Meteor.isClient) {
         'click #addAmount': function(e) {
             e.preventDefault();
             var amount = parseInt($('#amount').val());
-            Users.update(this._id, {
+            ProteinData.update(this._id, {
                 $inc: {
                     total: amount
                 }
@@ -43,8 +43,8 @@ if (Meteor.isClient) {
 
 if (Meteor.isServer) {
 
-    Meteor.publish('allUsers', function () {
-        return Users.find();
+    Meteor.publish('allProteinData', function () {
+        return ProteinData.find();
     });
 
     Meteor.publish('allHistory', function () {
@@ -52,28 +52,6 @@ if (Meteor.isServer) {
     });
 
     Meteor.startup(function() {
-        if (Users.find().count() === 0) {
-            Users.insert({
-                total: 120,
-                goal: 200
-            });
-        }
 
-        if (History.find().count() === 0) {
-            History.insert({
-                date: new Date().toTimeString(),
-                value: 30
-            });
-
-            History.insert({
-                date: new Date().toTimeString(),
-                value: 20
-            });
-
-            History.insert({
-                date: new Date().toTimeString(),
-                value: 10
-            });
-        }
     });
 }
