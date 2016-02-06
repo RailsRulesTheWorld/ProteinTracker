@@ -8,7 +8,17 @@ if (Meteor.isClient) {
 
     Template.userDetails.helpers({
         user: function() {
-            return ProteinData.findOne();
+            var data = ProteinData.findOne();
+            if (!data) {
+                data = {
+                    userId: Meteor.userId(),
+                    total: 0,
+                    goal: 200
+                };
+                ProteinData.insert(data);
+            }
+
+            return data;
         }
     });
 
@@ -44,11 +54,11 @@ if (Meteor.isClient) {
 if (Meteor.isServer) {
 
     Meteor.publish('allProteinData', function () {
-        return ProteinData.find();
+        return ProteinData.find({ userId: this.userId });
     });
 
     Meteor.publish('allHistory', function () {
-        return History.find();
+        return History.find({ userId: this.userId });
     });
 
     Meteor.startup(function() {
