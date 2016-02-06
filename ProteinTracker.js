@@ -45,7 +45,7 @@ if (Meteor.isClient) {
             History.insert({
                 value: amount,
                 date: new Date().toTimeString(),
-                userId: this._id
+                userId: this.userId
             });
         }
     });
@@ -58,7 +58,7 @@ if (Meteor.isServer) {
     });
 
     Meteor.publish('allHistory', function () {
-        return History.find({ userId: this.userId });
+        return History.find({ userId: this.userId }, {sort: {date: -1}, limit: 5});
     });
 
     Meteor.startup(function() {
