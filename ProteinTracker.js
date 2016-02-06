@@ -19,6 +19,9 @@ if (Meteor.isClient) {
             }
 
             return data;
+        },
+        lastAmount: function() {
+            return Session.get('lastAmount');
         }
     });
 
@@ -47,6 +50,8 @@ if (Meteor.isClient) {
                 date: new Date().toTimeString(),
                 userId: this.userId
             });
+
+            Session.set('lastAmount', amount);
         }
     });
 }
