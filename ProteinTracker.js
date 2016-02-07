@@ -2,6 +2,14 @@ ProteinData = new Meteor.Collection('protein_data');
 History = new Meteor.Collection('history');
 
 if (Meteor.isClient) {
+    Deps.autorun(function() {
+        if (Meteor.user()) {
+            console.log("User logged in: " + Meteor.user().profile.name);
+        }else {
+            console.log("User logged out!");
+        }
+    });
+
     // 手动进行发布和订阅的必要性是客户关心他们想要的，而不是把所有数据都发送过去
     Meteor.subscribe('allProteinData');
     Meteor.subscribe('allHistory');
