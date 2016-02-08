@@ -1,6 +1,21 @@
 ProteinData = new Meteor.Collection('protein_data');
 History = new Meteor.Collection('history');
 
+Meteor.methods({
+    addProtein: function(amount) {
+        ProteinData.update({userId: this.userId}, {
+            $inc: {
+                total: amount
+            }
+        });
+        History.insert({
+            value: amount,
+            date: new Date().toTimeString(),
+            userId: this.userId
+        });
+    }
+});
+
 if (Meteor.isClient) {
     Deps.autorun(function() {
         if (Meteor.user()) {
@@ -48,15 +63,11 @@ if (Meteor.isClient) {
         'click #addAmount': function(e) {
             e.preventDefault();
             var amount = parseInt($('#amount').val());
-            ProteinData.update(this._id, {
-                $inc: {
-                    total: amount
+
+            Meteor.call('addProtein', amount, function (error, id) {
+                if (error) {
+                    return alert(error.reason);
                 }
-            });
-            History.insert({
-                value: amount,
-                date: new Date().toTimeString(),
-                userId: this.userId
             });
 
             Session.set('lastAmount', amount);
