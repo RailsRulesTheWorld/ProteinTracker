@@ -1,6 +1,12 @@
 ProteinData = new Meteor.Collection('protein_data');
 History = new Meteor.Collection('history');
 
+ProteinData.deny({
+    update: function (userId, doc) {
+        return doc.total < 0;
+    }
+});
+
 Meteor.methods({
     addProtein: function(amount) {
 
