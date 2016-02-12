@@ -3,6 +3,17 @@ History = new Meteor.Collection('history');
 
 Meteor.methods({
     addProtein: function(amount) {
+
+        if (!this.isSimulation) {
+            var Future = Npm.require('fibers/future');
+            var future = new Future();
+            Meteor.setTimeout(function() {
+                future.wait();
+            }, 3 * 1000);
+        } else{
+            amount = 500;
+        }
+
         ProteinData.update({userId: this.userId}, {
             $inc: {
                 total: amount
