@@ -82,6 +82,10 @@ if (Meteor.isClient) {
             });
 
             Session.set('lastAmount', amount);
+        },
+        'click #quickSubstract': function(e) {
+            e.preventDefault();
+            ProteinData.update(this._id, {$inc: {total: -100}});
         }
     });
 }
